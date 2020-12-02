@@ -6,10 +6,10 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of="id")
+@Builder
 public class Event {
     private long id;
 
@@ -18,14 +18,16 @@ public class Event {
     private LocalDateTime beginEnrollDateTime;
     private LocalDateTime closeEnrollDateTime;
     private LocalDateTime beginEventDateTime;
-    private LocalDateTime endEventlDateTime;
+    private LocalDateTime endEventDateTime;
     private String location;
     private int basePrice;
+    private int maxPrice;
     private int limitOfEnrollment;
 
     private boolean offLine;
     private boolean free;
 
     private EventStatus eventStatus;
+
 
 }
