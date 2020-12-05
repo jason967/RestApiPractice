@@ -38,7 +38,7 @@ public class EventControllerTest {
 
     //제대로된(요청이 가능한) 값이 들어오는 경우
     @Test
-    public void creatEvent() throws Exception {
+    public void createEvent() throws Exception {
 
         EventDto event = EventDto.builder()
                 .name("Spring")
@@ -69,7 +69,7 @@ public class EventControllerTest {
 
     //잘못된 값이 들어오는 경우
     @Test
-    public void creatEvent_Bad_Request() throws Exception {
+    public void createEvent_Bad_Request() throws Exception {
 
         Event event = Event.builder()
                 .id(100)
@@ -86,6 +86,32 @@ public class EventControllerTest {
                 .free(true)
                 .offLine(false)
                 .eventStatus(EventStatus.PUBLISHED)
+                .build();
+
+        mockMvc.perform(post("/api/events/")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaTypes.HAL_JSON)
+                .content(objectMapper.writeValueAsString(event)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                ;
+    }
+    @Test
+    public void createEvent_Bad_Request_Wrong_Input() throws Exception {
+
+        EventDto event = EventDto.builder()
+                .name("Spring")
+                .description("Rest API Development with Spring")
+                .beginEnrollDateTime(LocalDateTime.of(2020, 12, 02, 21, 00))
+                .closeEnrollDateTime(LocalDateTime.of(2020, 12, 04, 22, 00))
+                //시작하는 날짜보다 끝나는 날짜가 빠른 경우
+                .beginEventDateTime(LocalDateTime.of(2020, 12, 05, 14, 21))
+                .endEventDateTime(LocalDateTime.of(2020, 12, 04, 14, 21))
+                //최대 금액보다 기본 금액이 더 큰 경우
+                .basePrice(10000)
+                .maxPrice(200)
+                .limitOfEnrollment(100)
+                .location("강남역 D2 스타텁 팩토리")
                 .build();
 
         mockMvc.perform(post("/api/events/")
