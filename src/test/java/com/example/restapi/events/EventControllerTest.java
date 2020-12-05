@@ -1,5 +1,6 @@
 package com.example.restapi.events;
 
+import com.example.restapi.Common.TestDescription;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,6 +39,7 @@ public class EventControllerTest {
 
     //제대로된(요청이 가능한) 값이 들어오는 경우
     @Test
+    @TestDescription("정상정으로 이벤트를 생성하는 테스트")
     public void createEvent() throws Exception {
 
         EventDto event = EventDto.builder()
@@ -69,6 +71,7 @@ public class EventControllerTest {
 
     //잘못된 값이 들어오는 경우
     @Test
+    @TestDescription("입력 받을 수 없는 값을 사용한 경우에 입력받는 에러가 발생하는 테스트")
     public void createEvent_Bad_Request() throws Exception {
 
         Event event = Event.builder()
@@ -97,6 +100,7 @@ public class EventControllerTest {
                 ;
     }
     @Test
+    @TestDescription("입력값이 비어있는 경우에 에러가 발생하는 테스트")
     public void createEvent_Bad_Request_Wrong_Input() throws Exception {
 
         EventDto event = EventDto.builder()
@@ -124,6 +128,7 @@ public class EventControllerTest {
     }
 
     @Test
+    @TestDescription("입력값이 잘못되었을 때 에러가 발생하는 테스트")
     public void createEvent_Bad_Request_Empty_Input() throws Exception {
         EventDto eventDto = EventDto.builder().build();
 
