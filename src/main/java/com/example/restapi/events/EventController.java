@@ -36,11 +36,11 @@ public class EventController {
     public ResponseEntity createEvent(@RequestBody @Valid EventDto eventDto, Errors errors) {
         System.out.println(errors);
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(errors);
         }
         eventValidator.validate(eventDto, errors);
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(errors);
         }
         //원래는
 //        Event event = Event.builder()
@@ -50,6 +50,8 @@ public class EventController {
         //이런게 다 해줘야함
 
         //modelMapper을 사용한 경우
+        //objectMapper를 사용해서 매핑하는데 자바빈 스펙을 준수한 상태
+        //event 경우는 이벤트 객체를 json으로 직렬화해서 사용할 때, BeanSerializer으로 직렬화하므로
         Event event = modelMapper.map(eventDto, Event.class);
         Event newEvent = this.eventRepository.save(event);
         URI createdUri = linkTo(EventController.class).slash(newEvent.getId()).toUri();
