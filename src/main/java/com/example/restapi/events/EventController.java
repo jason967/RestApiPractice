@@ -53,6 +53,7 @@ public class EventController {
         //objectMapper를 사용해서 매핑하는데 자바빈 스펙을 준수한 상태
         //event 경우는 이벤트 객체를 json으로 직렬화해서 사용할 때, BeanSerializer으로 직렬화하므로
         Event event = modelMapper.map(eventDto, Event.class);
+        event.update();
         Event newEvent = this.eventRepository.save(event);
         URI createdUri = linkTo(EventController.class).slash(newEvent.getId()).toUri();
         return ResponseEntity.created(createdUri).body(event);

@@ -59,8 +59,9 @@ public class EventControllerTest {
                 .andExpect(header().exists(HttpHeaders.LOCATION))
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
                 .andExpect(jsonPath("id").value(Matchers.not(100)))
-                .andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()))
-                .andExpect(jsonPath("free").value(Matchers.not(true)));
+                .andExpect(jsonPath("free").value(false))
+                .andExpect(jsonPath("offline").value(true))
+                .andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()));
     }
 
     //잘못된 값이 들어오는 경우
@@ -81,7 +82,7 @@ public class EventControllerTest {
                 .limitOfEnrollment(100)
                 .location("강남역 D2 스타텁 팩토리")
                 .free(true)
-                .offLine(false)
+                .offline(false)
                 .eventStatus(EventStatus.PUBLISHED)
                 .build();
 
