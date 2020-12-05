@@ -17,11 +17,15 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 @RequestMapping(value = "/api/events",produces = MediaTypes.HAL_JSON_VALUE)
 public class EventController {
 
-    @Autowired
-    EventRepository eventRepository;
+    private  final EventRepository eventRepository;
 
-    @Autowired
-    ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
+
+    public EventController(EventRepository eventRepository,ModelMapper modelMapper)
+    {
+        this.eventRepository = eventRepository;
+        this.modelMapper = modelMapper;
+    }
 
     @PostMapping
     public ResponseEntity createEvent(@RequestBody EventDto eventDto)
@@ -36,6 +40,7 @@ public class EventController {
         //modelMappe을 사용한 경우
         Event event = modelMapper.map(eventDto,Event.class);
         Event newEvent = this.eventRepository.save(event);
+        System.out.println(newEvent);
         URI createdUri = linkTo(EventController.class).slash(newEvent.getId()).toUri();
         return ResponseEntity.created(createdUri).body(event);
     }
