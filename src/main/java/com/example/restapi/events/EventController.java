@@ -14,22 +14,21 @@ import java.net.URI;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @Controller
-@RequestMapping(value = "/api/events",produces = MediaTypes.HAL_JSON_VALUE)
+@RequestMapping(value = "/api/events", produces = MediaTypes.HAL_JSON_VALUE)
 public class EventController {
 
-    private  final EventRepository eventRepository;
+    private final EventRepository eventRepository;
 
     private final ModelMapper modelMapper;
 
-    public EventController(EventRepository eventRepository,ModelMapper modelMapper)
-    {
+    public EventController(EventRepository eventRepository, ModelMapper modelMapper) {
         this.eventRepository = eventRepository;
         this.modelMapper = modelMapper;
     }
 
     @PostMapping
-    public ResponseEntity createEvent(@RequestBody EventDto eventDto)
-    {
+    //@RequestBody를 통한 JSON을 객체로 변환 하는 과정 :=Deserializaion
+    public ResponseEntity createEvent(@RequestBody EventDto eventDto) {
         //원래는
 //        Event event = Event.builder()
 //                .name(eventDto.getName())
@@ -38,7 +37,7 @@ public class EventController {
         //이런게 다 해줘야함
 
         //modelMappe을 사용한 경우
-        Event event = modelMapper.map(eventDto,Event.class);
+        Event event = modelMapper.map(eventDto, Event.class);
         Event newEvent = this.eventRepository.save(event);
         System.out.println(newEvent);
         URI createdUri = linkTo(EventController.class).slash(newEvent.getId()).toUri();

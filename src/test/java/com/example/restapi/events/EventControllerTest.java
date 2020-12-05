@@ -36,15 +36,47 @@ public class EventControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    //제대로된(요청이 가능한) 값이 들어오는 경우
     @Test
     public void creatEvent() throws Exception {
+
+        EventDto event = EventDto.builder()
+                .name("Spring")
+                .description("Rest API Development with Spring")
+                .beginEnrollDateTime(LocalDateTime.of(2020, 12, 02, 21, 00))
+                .closeEnrollDateTime(LocalDateTime.of(2020, 12, 04, 22, 00))
+                .beginEventDateTime(LocalDateTime.of(2020, 12, 05, 14, 21))
+                .endEventDateTime(LocalDateTime.of(2020, 12, 07, 14, 21))
+                .basePrice(100)
+                .maxPrice(200)
+                .limitOfEnrollment(100)
+                .location("강남역 D2 스타텁 팩토리")
+                .build();
+
+        mockMvc.perform(post("/api/events/")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaTypes.HAL_JSON)
+                .content(objectMapper.writeValueAsString(event)))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("id").exists())
+                .andExpect(header().exists(HttpHeaders.LOCATION))
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
+                .andExpect(jsonPath("id").value(Matchers.not(100)))
+                .andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()))
+                .andExpect(jsonPath("free").value(Matchers.not(true)));
+    }
+
+    //잘못된 값이 들어오는 경우
+    @Test
+    public void creatEvent_Bad_Request() throws Exception {
 
         Event event = Event.builder()
                 .id(100)
                 .name("Spring")
                 .description("Rest API Development with Spring")
-                .beginEnrollDateTime(LocalDateTime.of(2020,12,02,21,00))
-                .closeEnrollDateTime(LocalDateTime.of(2020,12,04,22,00))
+                .beginEnrollDateTime(LocalDateTime.of(2020, 12, 02, 21, 00))
+                .closeEnrollDateTime(LocalDateTime.of(2020, 12, 04, 22, 00))
                 .beginEventDateTime(LocalDateTime.of(2020, 12, 05, 14, 21))
                 .endEventDateTime(LocalDateTime.of(2020, 12, 07, 14, 21))
                 .basePrice(100)
@@ -61,16 +93,8 @@ public class EventControllerTest {
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(event)))
                 .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("id").exists())
-                .andExpect(header().exists(HttpHeaders.LOCATION))
-                .andExpect(header().string(HttpHeaders.CONTENT_TYPE,MediaTypes.HAL_JSON_VALUE))
-                .andExpect(jsonPath("id").value(Matchers.not(100)))
-                .andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()))
-                .andExpect(jsonPath("free").value(Matchers.not(true)));
+                .andExpect(status().isBadRequest())
+                ;
 
     }
-
-
-
 }

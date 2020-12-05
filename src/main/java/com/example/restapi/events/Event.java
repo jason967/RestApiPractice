@@ -10,11 +10,12 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of="id")
+@EqualsAndHashCode(of = "id")
 @Builder
 public class Event {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private long id;
 
     private String name;
@@ -31,7 +32,7 @@ public class Event {
     private boolean offLine;
     private boolean free;
 
-@Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private EventStatus eventStatus = EventStatus.DRAFT;
 
 }
