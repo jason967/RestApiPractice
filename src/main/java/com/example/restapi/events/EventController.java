@@ -1,7 +1,9 @@
 package com.example.restapi.events;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
@@ -53,10 +55,18 @@ public class EventController {
         //objectMapper를 사용해서 매핑하는데 자바빈 스펙을 준수한 상태
         //event 경우는 이벤트 객체를 json으로 직렬화해서 사용할 때, BeanSerializer으로 직렬화하므로
         Event event = modelMapper.map(eventDto, Event.class);
-        event.update();
         Event newEvent = this.eventRepository.save(event);
-        URI createdUri = linkTo(EventController.class).slash(newEvent.getId()).toUri();
-        return ResponseEntity.created(createdUri).body(event);
+        event.update();
+
+        //url 추가
+        WebMvcLinkBuilder selfLinkBuilder = linkTo(EventController.class).slash(newEvent.getId());
+        URI createdUri = selfLinkBuilder.toUri();
+        EventResource eventResource = new EventResource(event);
+        eventResource.add(linkTo(EventController.class).withRel("query-events"));
+        //.withSelfRel하면 self링크 추가
+        eventResource.add(selfLinkBuilder.withSelfRel());
+        eventResource.add(selfLinkBuilder.withRel("update-event"));
+        return ResponseEntity.created(createdUri).body(eventResource);
     }
 
 
