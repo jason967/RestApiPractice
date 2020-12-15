@@ -1,7 +1,6 @@
 package com.example.restapi.events;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
@@ -63,8 +62,6 @@ public class EventController {
         URI createdUri = selfLinkBuilder.toUri();
         EventResource eventResource = new EventResource(event);
         eventResource.add(linkTo(EventController.class).withRel("query-events"));
-        //.withSelfRel하면 self링크 추가
-        eventResource.add(selfLinkBuilder.withSelfRel());
         eventResource.add(selfLinkBuilder.withRel("update-event"));
         return ResponseEntity.created(createdUri).body(eventResource);
     }
