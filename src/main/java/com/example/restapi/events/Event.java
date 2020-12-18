@@ -5,17 +5,12 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Getter @Setter  @EqualsAndHashCode(of = "id")
+@AllArgsConstructor @Builder @NoArgsConstructor
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(of = "id")
-@Builder
 public class Event {
 
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue
     private long id;
 
     private String name;
