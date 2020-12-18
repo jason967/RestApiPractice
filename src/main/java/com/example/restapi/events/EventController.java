@@ -1,5 +1,6 @@
 package com.example.restapi.events;
 
+import com.example.restapi.Common.ErrorsResource;
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
@@ -32,17 +33,22 @@ public class EventController {
         this.eventValidator = eventValidator;
     }
 
+    private ResponseEntity badRequest(Errors errors)
+    {
+        return ResponseEntity.badRequest().body(ErrorsResource.modelOf(errors));
+    }
+
     @PostMapping
     //@RequestBody를 통한 JSON을 객체로 변환 하는 과정 :=Deserializaion
     //@Valid -> 도메인에서 객체를 바인딩할 때 조건을 붙여줌
     public ResponseEntity createEvent(@RequestBody @Valid EventDto eventDto, Errors errors) {
         System.out.println(errors);
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().body(errors);
+            return badRequest(errors);
         }
         eventValidator.validate(eventDto, errors);
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().body(errors);
+            return badRequest(errors);
         }
         //원래는
 //        Event event = Event.builder()
