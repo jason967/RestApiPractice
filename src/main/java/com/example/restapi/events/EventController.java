@@ -93,10 +93,13 @@ public class EventController {
         Optional<Event> optionalEvent = this.eventRepository.findById(id);
         if(!optionalEvent.isPresent())
         {
+            //notFound를 만들어서 보낸다
             return ResponseEntity.notFound().build();
         }
         Event event = optionalEvent.get();
+        //그냥 이벤트를 보낼것이 아니라 eventResource를 만들어서 보내야함
         EventResource eventResource =new EventResource(event);
+        eventResource.add(new Link("/docs/index.html#resources-events-get").withRel("profile"));
         return ResponseEntity.ok(eventResource);
     }
 
