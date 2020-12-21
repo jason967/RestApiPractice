@@ -1,5 +1,6 @@
 package com.example.restapi.events;
 
+import com.example.restapi.accounts.Account;
 import lombok.*;
 
 import javax.persistence.*;
@@ -29,6 +30,10 @@ public class Event {
 
     @Enumerated(EnumType.STRING)
     private EventStatus eventStatus = EventStatus.DRAFT;
+
+    //JPA 매핑
+    @ManyToOne
+    private Account manager;
 
     public void update() {
         //Update Free
