@@ -1,9 +1,7 @@
 package com.example.restapi.Common;
 
 import com.example.restapi.index.IndexController;
-
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Link;
 import org.springframework.validation.Errors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
