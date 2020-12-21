@@ -1,6 +1,7 @@
 package com.example.restapi.events;
 
 import com.example.restapi.Common.TestDescription;
+import com.example.restapi.common.BaseControllerTest;
 import com.example.restapi.common.RestDocsConfiguration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
@@ -36,25 +37,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@RunWith(SpringRunner.class)
-@AutoConfigureMockMvc
-@AutoConfigureRestDocs
-@Import(RestDocsConfiguration.class)
-@ActiveProfiles("test")
-public class EventControllerTest {
-
-    @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    ObjectMapper objectMapper;
+public class EventControllerTest extends BaseControllerTest {
 
     @Autowired
     EventRepository eventRepository;
-
-    @Autowired
-    ModelMapper modelMapper;
 
     //제대로된(요청이 가능한) 값이 들어오는 경우
     @Test
